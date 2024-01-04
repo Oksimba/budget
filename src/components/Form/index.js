@@ -16,10 +16,9 @@ class Form extends Component{
 
     onSubmit = (e) => {
         e.preventDefault();
-        this.props.onChange(this.state.value);
+        this.props.onChange(this.state);
         this.setState({
             value: '',
-            date: '',
             comment: ''
         })
     }

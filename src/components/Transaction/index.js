@@ -1,13 +1,13 @@
 import propTypes from 'prop-types';
-import {Wrapper} from './styles.js';
+import {Wrapper, TransactionDate, Value, Comment} from './styles.js';
 
 
 const Transaction = ({transaction}) =>{
     return(
         <Wrapper value={transaction.value}>
-            Label: {transaction.label}
-            <p>Value: {transaction.value}</p>
-            <br/>
+            <TransactionDate>{transaction.date}</TransactionDate>
+            <Value>{transaction.value.toFixed(2)}</Value>
+            <Comment>{transaction.comment}</Comment>
         </Wrapper>
     )
 }
@@ -21,8 +21,9 @@ Transaction.propTypes = {
 
 Transaction.defaultProps = {
     transaction:{
-        label: '',
-        value: 0
+        comment: '',
+        value: 0,
+        date: ''
     }
 }
 

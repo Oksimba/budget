@@ -2,10 +2,9 @@ import { Component } from 'react';
 import Balance from '../Balance';
 import Transactions from '../Transactions';
 import Form from '../Form';
-import { GlobalStyle, Wrapper } from './styles';
+import { Wrapper } from './styles';
 import ErrorBoundary from '../ErrorBoundary';
-
-let id = 0;
+import { getItems, addItem } from '../../utils/indexdb';
 
 class Home extends Component {
     constructor(){
@@ -17,16 +16,31 @@ class Home extends Component {
         console.log('constructor');
     }
 
-    onChange = (value) => {
+    componentDidMount(){
+        getItems().then((transactions) => {
+            this.setState({
+                transactions
+            })
+        }).catch((e) => {
+            debugger
+        })
+    }
+
+    onChange = ({value, date, comment}) => {
+        const transaction = {
+            value: +value, 
+            comment,
+            date,
+            id: Date.now()
+        }
+
         this.setState((state) => ({
             balance: state.balance + Number(value),
-            transactions: [{
-                value, 
-                label: 'change',
-                id: ++id
-            }, 
+            transactions: [transaction, 
             ...state.transactions]
-        }))
+        }));
+
+        addItem(transaction);
     }
 
 
@@ -39,7 +53,7 @@ class Home extends Component {
                     <Balance balance={this.state.balance}/>
                     <Form onChange={this.onChange}/>
                     <hr/>
-                    { <Transactions transactions={this.state.transactions}/>}
+                    <Transactions transactions={this.state.transactions}/>
                 </Wrapper>
             </ErrorBoundary>
           )
